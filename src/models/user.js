@@ -29,7 +29,6 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
-
     avatar: {
       type: Buffer,
     },
@@ -40,29 +39,29 @@ const userSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-      },
+      }, 
     ],
   },
-  {
-    timestamps: true,
-  }
+  { 
+    timestamps: true, 
+  } 
 );
 
-userSchema.virtual("tasks", {
-  ref: "Task",
-  localField: "_id",
-  foreignField: "owner",
-});
+userSchema.virtual("tasks", { 
+  ref: "Task", 
+  localField: "_id", 
+  foreignField: "owner", 
+});0
 
-userSchema.statics.findByCredentials = async (email, password) => {
+userSchema.statics.findByCredentials = async (email, password) => { 
   const user = await User.findOne({ email });
-
-  if (!user) {
+ 
+  if (!user) { 
     throw new Error("Email not found");
-  }
+  } 
 
   const isMatch = await bcrypt.compare(password, user.password);
-
+  
   if (!isMatch) {
     throw new Error("password wrong");
   }

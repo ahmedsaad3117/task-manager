@@ -28,7 +28,7 @@ const upload = multer({
   },
 });
 
-// Add a new users
+// Add a new users & sign up
 router.post("/users", async (req, resp) => {
   const user = new User(req.body);
 

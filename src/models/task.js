@@ -13,7 +13,7 @@ const taskSchema = new mongoose.Schema({
     default: false,
   },
 
-  owner: {
+  owner: { 
     type: ObjectId,
     required: true,
     ref: "User", //DISABLED LINE:B

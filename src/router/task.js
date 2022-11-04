@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const router = express.Router();
 
 // Add a new Task
-router.post("/tasks", auth, async (req, resp) => {
+router.get("/tasks", auth, async (req, resp) => {
   const task = new Task({
     ...req.body,
     owner: req.user._id,
@@ -42,15 +42,15 @@ router.get("/tasks", auth, async (req, resp) => {
     //const tasks = await Task.find({ owner: req.user._id });
 
     const match = {};
-    const sort = {}
+    const sort = {};
 
     if (req.query.completed) {
       match.completed = req.query.completed === "true";
     }
 
-    if(req.query.sortBy){
-      const parts = req.query.sortBy.split(':')
-      sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
+    if (req.query.sortBy) {
+      const parts = req.query.sortBy.split(":");
+      sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
     }
 
     await req.user.populate({
@@ -59,7 +59,7 @@ router.get("/tasks", auth, async (req, resp) => {
       options: {
         limit: parseInt(req.query.limit),
         skip: parseInt(req.query.limit),
-        sort
+        sort,
       },
     });
 
@@ -76,7 +76,6 @@ router.get("/tasks/:id", auth, async (req, resp) => {
   try {
     const task = await Task.findOne({ _id, owner: req.user._id });
     if (!task) {
-      
       return resp.status(404).send();
     }
 
@@ -84,6 +83,7 @@ router.get("/tasks/:id", auth, async (req, resp) => {
   } catch (e) {
     resp.status(500).send();
     console.log(e);
+    0;
   }
 });
 
@@ -107,6 +107,7 @@ router.put("/tasks/:id", auth, async (req, resp) => {
     updates.forEach((update) => {
       task[update] = req.body[update];
     });
+
     await task.save();
 
     resp.send(task);
@@ -125,7 +126,7 @@ router.delete("/tasks/:id", auth, async (req, resp) => {
 
     if (!task) {
       return resp.status(404).send({ error: "Task Not Found!" });
-    }
+    } 
 
     resp.send(task);
   } catch (e) {
@@ -134,3 +135,4 @@ router.delete("/tasks/:id", auth, async (req, resp) => {
 });
 
 module.exports = router;
+    
